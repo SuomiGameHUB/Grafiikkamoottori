@@ -23,13 +23,14 @@ static EngineState globalEngineState = {
     #include "linux_platform.c"
 #endif
 
+#if defined(_WIN32)
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nShowCmd) {
+	(void)hInstance; (void)hPrevInstance; (void)lpCmdLine; (void)nShowCmd;
+	bool success = initWindowWin();
+#elif defined(__linux__)
 int main(int argc, char **argv) {
 	(void)argc; (void)argv;
-	bool success = false;
-#if defined(_WIN32)
-	success = initWindowWin();
-#elif defined(__linux__)
-	success = initWindowLinux();
+	bool success = initWindowLinux();
 #endif
 	if (!success) return 1;
 	globalEngineState.isRunning = true;
